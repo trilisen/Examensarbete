@@ -1,0 +1,29 @@
+{
+  "name": "examensarbete",
+  "version": "1.0.0",
+  "description": "Polling website",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trilisen/Examensarbete.git"
+  },
+  "author": "Jon McGarvie",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/trilisen/Examensarbete/issues"
+  },
+  "homepage": "https://github.com/trilisen/Examensarbete#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.6.1",
+    "mongoose": "^6.0.12"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.14"
+  }
+}
