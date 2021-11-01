@@ -1,15 +1,15 @@
+import Option from "../../models/option.js"
 import Poll from "../../models/poll.js"
 import User from "../../models/user.js"
 
-const getPolls = async (pollIds) => {
+const getPoll = async (pollId) => {
   try {
-    const polls = await Poll.find({ _id: { $in: pollIds } })
-    return polls.map((poll) => {
-      return {
-        ...poll,
-        creator: getUser.bind(this, poll.creator),
-      }
-    })
+    const poll = await Poll.findById(pollId)
+    console.log(poll._doc)
+    return {
+      ...poll._doc,
+      creator: getUser.bind(this, poll.creator),
+    }
   } catch (err) {
     throw err
   }
@@ -18,19 +18,31 @@ const getPolls = async (pollIds) => {
 const getUser = async (userId) => {
   try {
     const user = await User.findById(userId)
-    return user
+    return {
+      ...user._doc,
+      password: null,
+    }
   } catch (err) {
     throw err
   }
 }
 
-// const getPollsById = async (userId) => {
-//   try {
-//     const polls = await Poll.find({ creator: userId })
-//     return polls
-//   } catch (err) {
-//     throw err
-//   }
-// }
+const getPollsByUserId = async (userId) => {
+  try {
+    const polls = await Poll.find({ creator: userId })
+    return polls
+  } catch (err) {
+    throw err
+  }
+}
 
-export { getPolls, getUser }
+const getOptionsForPoll = async (pollId) => {
+  try {
+    const options = await Option.find({ poll: pollId })
+    return options
+  } catch (err) {
+    throw err
+  }
+}
+
+export { getPoll, getUser, getPollsByUserId, getOptionsForPoll }

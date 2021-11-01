@@ -6,7 +6,7 @@ type Poll {
   title: String!
   description: String
   image: String
-  creator: User!
+  creator: User
   createdAt: String!
   updatedAt: String!
 }
@@ -32,6 +32,12 @@ type User {
   password: String
 }
 
+type LoginData {
+  userId: ID!
+  token: String!
+  tokenExpiration: Int!
+}
+
 input PollInput {
   title: String!
   description: String
@@ -44,15 +50,23 @@ input UserInput {
   password: String!
 }
 
+input OptionInput {
+  pollId: ID!
+  content: String!
+}
+
 type RootQuery {
   polls: [Poll!]!
+  findOptionsForPoll(pollId: ID!): [Option!]!
   users: [User!]!
-  findPolls(id:ID): [Poll!]!
+  findPolls(id: ID!): [Poll!]!
+  login(email: String!, password: String!): LoginData!
 }
 
 type RootMutation {
   createPoll(pollInput: PollInput): Poll
   createUser(userInput: UserInput): User
+  createOption(optionInput: OptionInput): Option
 }
 
 schema {
