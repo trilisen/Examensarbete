@@ -13,10 +13,6 @@ const pollSchema = new Schema(
       type: String,
       trim: true,
     },
-    image: {
-      type: String,
-      trim: true,
-    },
     creator: {
       type: Schema.Types.ObjectId,
       ref: "User",

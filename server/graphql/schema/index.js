@@ -5,7 +5,6 @@ type Poll {
   _id: ID!
   title: String!
   description: String
-  image: String
   creator: User
   createdAt: String!
   updatedAt: String!
@@ -41,7 +40,6 @@ type LoginData {
 input PollInput {
   title: String!
   description: String
-  image: String
 }
 
 input UserInput {

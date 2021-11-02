@@ -19,7 +19,6 @@ export default {
     const poll = new Poll({
       title: args.pollInput.title,
       description: args.pollInput.description,
-      image: args.pollInput.image,
       creator: req.isAuth ? req.userId : null,
     })
     try {
