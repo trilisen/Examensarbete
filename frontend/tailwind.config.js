@@ -2,7 +2,11 @@ module.exports = {
   purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      padding: {
+        "1/3": "33.333333%",
+      },
+    },
   },
   variants: {
     extend: {},

@@ -1,5 +1,5 @@
 import Poll from "../../models/poll.js"
-import { getUser, getPollsByUserId } from "./findData.js"
+import { getUser, getPollsByUserId, getPoll } from "./findData.js"
 
 export default {
   polls: async () => {
@@ -41,5 +41,8 @@ export default {
     } catch (err) {
       throw err
     }
+  },
+  findPollById: async (args) => {
+    return getPoll(args.id)
   },
 }

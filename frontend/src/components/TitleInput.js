@@ -7,7 +7,7 @@ const TitleInput = ({ handleChange }) => {
         type="text"
         name="title"
         placeholder="Example poll name"
-        className="p-2 rounded-xl mt-2 w-full"
+        className="p-2 rounded-xl mt-2 w-full border border-black"
         onChange={handleChange}
       />
     </div>

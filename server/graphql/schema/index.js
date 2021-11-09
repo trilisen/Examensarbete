@@ -56,8 +56,9 @@ input OptionInput {
 type RootQuery {
   polls: [Poll!]!
   findOptionsForPoll(pollId: ID!): [Option!]!
-  users: [User!]!
   findPolls(id: ID!): [Poll!]!
+  findPollById(id: ID!): Poll!
+  users: [User!]!
   login(email: String!, password: String!): LoginData!
 }
 
