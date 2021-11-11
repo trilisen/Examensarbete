@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 
 import Start from "./pages/Start.jsx"
 import Poll from "./pages/Poll.jsx"
+import Auth from "./pages/Auth.jsx"
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           </div>
           <Routes>
             <Route path="/" element={<Start />} />
+            <Route path="auth" element={<Auth />} />
             <Route path="poll/:pollId" element={<Poll />} />
           </Routes>
         </main>
