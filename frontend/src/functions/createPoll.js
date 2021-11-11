@@ -1,5 +1,3 @@
-import CurrentPollContext from "../context/currentPoll"
-
 const createPoll = (title, pollType) => {
   const request = {
     query: `
@@ -30,6 +28,10 @@ const createPoll = (title, pollType) => {
         throw new Error("Failed")
       }
       return res.json()
+    })
+    .then((resData) => {
+      const pollInfo = resData.data.createPoll
+      window.location.href = `/poll/${pollInfo._id}`
     })
     .catch((err) => {
       console.log(err)

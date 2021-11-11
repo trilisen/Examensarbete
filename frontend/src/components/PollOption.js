@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom"
-
 const PollOption = ({ pollType, onPress }) => {
   return (
     <button

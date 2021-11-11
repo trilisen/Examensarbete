@@ -45,7 +45,7 @@ const Poll = () => {
       .catch((err) => {
         console.log(err)
       })
-  })
+  }, [pollId])
 
   if (pollFound) {
     return (
