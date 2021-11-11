@@ -19,7 +19,7 @@ export default {
     const poll = new Poll({
       title: args.pollInput.title,
       description: args.pollInput.description,
-      creator: req.isAuth ? req.userId : null,
+      creator: req.userId,
     })
     try {
       const result = await poll.save()

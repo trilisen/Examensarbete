@@ -5,7 +5,7 @@ type Poll {
   _id: ID!
   title: String!
   description: String
-  creator: User
+  creator: User!
   createdAt: String!
   updatedAt: String!
 }
