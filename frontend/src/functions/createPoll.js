@@ -16,7 +16,7 @@ const createPoll = (title, pollType) => {
     `,
   }
 
-  fetch("http://localhost:4000/graphql", {
+  fetch("http://localhost:5000/graphql", {
     method: "POST",
     body: JSON.stringify(request),
     headers: {
@@ -28,10 +28,6 @@ const createPoll = (title, pollType) => {
         throw new Error("Failed")
       }
       return res.json()
-    })
-    .then((resData) => {
-      const pollInfo = resData.data.createPoll
-      window.location.href = `/poll/${pollInfo._id}`
     })
     .catch((err) => {
       console.log(err)

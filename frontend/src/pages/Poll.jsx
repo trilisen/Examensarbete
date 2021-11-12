@@ -25,7 +25,7 @@ const Poll = () => {
         }
       `,
     }
-    fetch("http://localhost:4000/graphql", {
+    fetch("http://localhost:5000/graphql", {
       method: "POST",
       body: JSON.stringify(request),
       headers: {

@@ -1,37 +1,80 @@
-import { useState, useRef } from "react"
+import { useState, useContext } from "react"
+import { useNavigate, useLocation } from "react-router"
+
+import AuthContext from "../context/AuthContext"
 
 const Auth = () => {
+  let navigate = useNavigate()
+  let location = useLocation()
+  let from = location.state?.from?.pathname || "/"
+  const { dispatch } = useContext(AuthContext)
+  const initialState = {
+    email: "",
+    password: "",
+    isSubmitting: false,
+    errorMessage: null,
+  }
+
+  const [data, setData] = useState(initialState)
   const [isLogin, setIsLogin] = useState(false)
 
-  const [error, setError] = useState(null)
+  const handleInputChange = (event) => {
+    setData({
+      ...data,
+      [event.target.name]: event.target.value,
+    })
+  }
 
-  const username = useRef(null)
-  const email = useRef(null)
-  const password = useRef(null)
-  const passwordConfirm = useRef(null)
+  const handleFormSubmit = (event) => {
+    event.preventDefault()
+    setData({
+      ...data,
+      isSubmitting: true,
+      errorMessage: null,
+    })
 
-  const handleSubmit = (e) => {
-    setError(null)
-    e.preventDefault()
-    if (isLogin) {
-      // Login the user
-      console.log([email.current.value, password.current.value])
-    } else {
-      // Password check
-      if (password.current.value !== passwordConfirm.current.value) {
-        return setError("Passwords don't match")
-      }
-      // Register the user
-      console.log([
-        username.current.value,
-        email.current.value,
-        password.current.value,
-      ])
+    const request = {
+      query: `
+        query {
+          login(email: "${data.email}", password: "${data.password}"){
+            userId
+            token
+            tokenExpiration
+          }
+        }
+      `,
     }
+
+    fetch("http://localhost:5000/graphql", {
+      method: "POST",
+      body: JSON.stringify(request),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error("Failed")
+        }
+        return res.json()
+      })
+      .then((resJson) => {
+        dispatch({
+          type: "LOGIN",
+          payload: resJson.data.login,
+        })
+        navigate(from, { replace: true })
+      })
+      .catch((error) => {
+        setData({
+          ...data,
+          isSubmitting: false,
+          errorMessage: error.message || error.statusText,
+        })
+      })
   }
 
   const handleIsLoginChange = (e) => {
-    setError(null)
     e.preventDefault()
     setIsLogin(!isLogin)
   }
@@ -40,45 +83,54 @@ const Auth = () => {
 
   return (
     <div className="flex flex-col">
-      {error && <div className="text-red-600">{error}</div>}
+      {data.errorMessage && (
+        <div className="text-red-600">{data.errorMessage}</div>
+      )}
       {!isLogin && (
-        <div>
-          <label htmlFor="username">Username</label>
+        <label htmlFor="username">
+          Username
           <input
             type="text"
             name="username"
             className={inputStyles}
-            ref={username}
+            onChange={handleInputChange}
           />
-        </div>
+        </label>
       )}
-      <div>
-        <label htmlFor="email">Email</label>
-        <input type="email" name="email" className={inputStyles} ref={email} />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
+      <label htmlFor="email">
+        Email
+        <input
+          type="email"
+          name="email"
+          className={inputStyles}
+          onChange={handleInputChange}
+        />
+      </label>
+
+      <label htmlFor="password">
+        Password
         <input
           type="password"
           name="password"
           className={inputStyles}
-          ref={password}
+          onChange={handleInputChange}
         />
-      </div>
+      </label>
+
       {!isLogin && (
-        <div>
-          <label htmlFor="password-confirm">Confirm password</label>
+        <label htmlFor="password-confirm">
+          Confirm password
           <input
             type="password"
             name="password-confirm"
             className={inputStyles}
-            ref={passwordConfirm}
+            onChange={handleInputChange}
           />
-        </div>
+        </label>
       )}
-      <button onClick={handleSubmit}>Submit</button>
+      <button onClick={handleFormSubmit}>Submit</button>
       <button onClick={handleIsLoginChange}>
-        {isLogin ? "Login" : "Register"}
+        Change to {isLogin ? "Register" : "Login"}
       </button>
     </div>
   )

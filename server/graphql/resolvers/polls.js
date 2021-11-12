@@ -16,6 +16,9 @@ export default {
     }
   },
   createPoll: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!")
+    }
     const poll = new Poll({
       title: args.pollInput.title,
       description: args.pollInput.description,
