@@ -13,6 +13,7 @@ const Auth = () => {
     password: "",
     isSubmitting: false,
     errorMessage: null,
+    statusMessage: null,
   }
 
   const [data, setData] = useState(initialState)
@@ -33,45 +34,94 @@ const Auth = () => {
       errorMessage: null,
     })
 
-    const request = {
-      query: `
-        query {
-          login(email: "${data.email}", password: "${data.password}"){
-            userId
-            token
-            tokenExpiration
+    if (isLogin) {
+      const request = {
+        query: `
+          query {
+            login(email: "${data.email}", password: "${data.password}"){
+              userId
+              token
+              tokenExpiration
+            }
           }
-        }
-      `,
-    }
+        `,
+      }
 
-    fetch("http://localhost:5000/graphql", {
-      method: "POST",
-      body: JSON.stringify(request),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error("Failed")
-        }
-        return res.json()
+      fetch("http://localhost:5000/graphql", {
+        method: "POST",
+        body: JSON.stringify(request),
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
-      .then((resJson) => {
-        dispatch({
-          type: "LOGIN",
-          payload: resJson.data.login,
+        .then((res) => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error("Failed")
+          }
+          return res.json()
         })
-        navigate(from, { replace: true })
-      })
-      .catch((error) => {
-        setData({
+        .then((resJson) => {
+          dispatch({
+            type: "LOGIN",
+            payload: resJson.data.login,
+          })
+          navigate(from, { replace: true })
+        })
+        .catch((error) => {
+          setData({
+            ...data,
+            isSubmitting: false,
+            errorMessage: error.message || error.statusText,
+          })
+        })
+    } else {
+      if (data.password !== data.passwordConfirm) {
+        return setData({
           ...data,
-          isSubmitting: false,
-          errorMessage: error.message || error.statusText,
+          errorMessage: "Passwords don't match",
         })
+      }
+      const request = {
+        query: `
+          mutation {
+            createUser(userInput:{email: "${data.email}", username:"${data.username}", password:"${data.password}"}){
+              _id
+              email
+              username
+            }
+          }
+        `,
+      }
+
+      fetch("http://localhost:5000/graphql", {
+        method: "POST",
+        body: JSON.stringify(request),
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
+        .then((res) => {
+          if (res.status !== 200 && res.status !== 201) {
+            throw new Error("Failed")
+          }
+          return res.json()
+        })
+        .then(() => {
+          setIsLogin(true)
+          setData({
+            ...data,
+            statusMessage: "Successfully created account, please log in",
+            errorMessage: null,
+          })
+        })
+        .catch((error) => {
+          setData({
+            ...data,
+            isSubmitting: false,
+            errorMessage: error.message || error.statusText,
+          })
+        })
+    }
   }
 
   const handleIsLoginChange = (e) => {
@@ -85,6 +135,9 @@ const Auth = () => {
     <div className="flex flex-col">
       {data.errorMessage && (
         <div className="text-red-600">{data.errorMessage}</div>
+      )}
+      {data.statusMessage && (
+        <div className="text-green-400">{data.statusMessage}</div>
       )}
       <form className="flex flex-col">
         {!isLogin && (
@@ -119,11 +172,11 @@ const Auth = () => {
         </label>
 
         {!isLogin && (
-          <label htmlFor="password-confirm">
+          <label htmlFor="passwordConfirm">
             Confirm password
             <input
               type="password"
-              name="password-confirm"
+              name="passwordConfirm"
               className={inputStyles}
               onChange={handleInputChange}
             />
