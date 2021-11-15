@@ -19,8 +19,8 @@ const initialState = {
 const reducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
-      localStorage.setItem("userId", JSON.stringify(action.payload.userId))
-      localStorage.setItem("token", JSON.stringify(action.payload.token))
+      localStorage.setItem("userId", action.payload.userId)
+      localStorage.setItem("token", action.payload.token)
       return {
         ...state,
         isAuthenticated: true,
@@ -43,6 +43,9 @@ const reducer = (state, action) => {
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState)
 
+  const handleLogout = () => {
+    dispatch({ type: "LOGOUT" })
+  }
   return (
     <Router>
       <AuthProvider
@@ -53,8 +56,15 @@ function App() {
       >
         <div className="min-h-full">
           <main className="flex flex-col">
-            <div className="text-center text-5xl py-5 h-1/6">
-              <a href="/">POLL.EM</a>
+            <div className=" ">
+              <a href="/" className="text-center text-5xl py-5 h-1/6">
+                POLL.EM
+              </a>
+              {localStorage.getItem("userId") ? (
+                <button onClick={handleLogout}>LOGOUT</button>
+              ) : (
+                <a href="/auth">LOGIN</a>
+              )}
             </div>
             <Routes>
               <Route path="auth" element={<Auth />} />
@@ -66,14 +76,7 @@ function App() {
                   </RequireAuth>
                 }
               />
-              <Route
-                path="poll/:pollId"
-                element={
-                  <RequireAuth>
-                    <Poll />
-                  </RequireAuth>
-                }
-              />
+              <Route path="poll/:pollId" element={<Poll />} />
             </Routes>
           </main>
         </div>

@@ -16,7 +16,7 @@ const Auth = () => {
   }
 
   const [data, setData] = useState(initialState)
-  const [isLogin, setIsLogin] = useState(false)
+  const [isLogin, setIsLogin] = useState(true)
 
   const handleInputChange = (event) => {
     setData({
@@ -86,49 +86,53 @@ const Auth = () => {
       {data.errorMessage && (
         <div className="text-red-600">{data.errorMessage}</div>
       )}
-      {!isLogin && (
-        <label htmlFor="username">
-          Username
+      <form className="flex flex-col">
+        {!isLogin && (
+          <label htmlFor="username">
+            Username
+            <input
+              type="text"
+              name="username"
+              className={inputStyles}
+              onChange={handleInputChange}
+            />
+          </label>
+        )}
+        <label htmlFor="email">
+          Email
           <input
-            type="text"
-            name="username"
+            type="email"
+            name="email"
             className={inputStyles}
             onChange={handleInputChange}
           />
         </label>
-      )}
-      <label htmlFor="email">
-        Email
-        <input
-          type="email"
-          name="email"
-          className={inputStyles}
-          onChange={handleInputChange}
-        />
-      </label>
 
-      <label htmlFor="password">
-        Password
-        <input
-          type="password"
-          name="password"
-          className={inputStyles}
-          onChange={handleInputChange}
-        />
-      </label>
-
-      {!isLogin && (
-        <label htmlFor="password-confirm">
-          Confirm password
+        <label htmlFor="password">
+          Password
           <input
             type="password"
-            name="password-confirm"
+            name="password"
             className={inputStyles}
             onChange={handleInputChange}
           />
         </label>
-      )}
-      <button onClick={handleFormSubmit}>Submit</button>
+
+        {!isLogin && (
+          <label htmlFor="password-confirm">
+            Confirm password
+            <input
+              type="password"
+              name="password-confirm"
+              className={inputStyles}
+              onChange={handleInputChange}
+            />
+          </label>
+        )}
+        <button type="submit" onClick={handleFormSubmit}>
+          Submit
+        </button>
+      </form>
       <button onClick={handleIsLoginChange}>
         Change to {isLogin ? "Register" : "Login"}
       </button>

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { useDebounce } from "use-debounce"
 
 import PollOption from "../components/PollOption"
@@ -6,7 +6,11 @@ import TitleInput from "../components/TitleInput"
 
 import createPoll from "../functions/createPoll"
 
+import AuthContext from "../context/AuthContext"
+
 const Start = () => {
+  const { state } = useContext(AuthContext)
+
   const [title, setTitle] = useState("")
   const [titleInputed, setTitleInputed] = useState(false)
   const [debouncedtitleInput] = useDebounce(titleInputed, 2000)
@@ -15,7 +19,7 @@ const Start = () => {
 
   const handleInitialPollSubmit = (e) => {
     setPollType(e.target.value)
-    createPoll(title, pollType)
+    createPoll(title, pollType, state.token || localStorage.getItem("token"))
   }
 
   return (

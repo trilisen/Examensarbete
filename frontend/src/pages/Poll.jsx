@@ -6,8 +6,12 @@ const Poll = () => {
 
   const { pollId } = params
 
+  const [isOwner, setIsOwner] = useState(false)
+
   const [pollInfo, setPollInfo] = useState({})
   const [pollFound, setPollFound] = useState(false)
+
+  let localUserId = localStorage.getItem("userId")
 
   useEffect(() => {
     const request = {
@@ -39,19 +43,34 @@ const Poll = () => {
         return res.json()
       })
       .then((resData) => {
+        let info = resData.data.findPollById
         setPollFound(true)
-        setPollInfo(resData.data.findPollById)
+        setPollInfo(info)
+        if (info.creator._id === localUserId) {
+          setIsOwner(true)
+        } else {
+          setIsOwner(false)
+        }
       })
       .catch((err) => {
         console.log(err)
       })
-  }, [pollId])
+  }, [pollId, localUserId])
 
   if (pollFound) {
     return (
       <div className="flex flex-col items-center">
         <h2 className="font-bold text-2xl">{pollInfo.title}</h2>
-        <p className="text-gray-500">{pollInfo.description}</p>
+        {isOwner ? (
+          <input
+            type="text"
+            className="text-gray-500 border"
+            placeholder={pollInfo.description}
+          />
+        ) : (
+          <p className="text-gray-500">{pollInfo.description}</p>
+        )}
+        {isOwner && <h2>Yo</h2>}
         <div></div>
       </div>
     )

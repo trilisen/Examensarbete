@@ -1,4 +1,4 @@
-const createPoll = (title, pollType) => {
+const createPoll = (title, pollType, token) => {
   const request = {
     query: `
       mutation {
@@ -8,8 +8,6 @@ const createPoll = (title, pollType) => {
           description
           creator {
             _id
-            username
-            email
           }
         }
       }
@@ -21,6 +19,7 @@ const createPoll = (title, pollType) => {
     body: JSON.stringify(request),
     headers: {
       "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
     },
   })
     .then((res) => {
@@ -28,6 +27,10 @@ const createPoll = (title, pollType) => {
         throw new Error("Failed")
       }
       return res.json()
+    })
+    .then((resData) => {
+      const pollInfo = resData.data.createPoll
+      window.location.href = `/poll/${pollInfo._id}`
     })
     .catch((err) => {
       console.log(err)
