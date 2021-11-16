@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router"
+import Option from "../components/Option"
 
 const Poll = () => {
   const params = useParams()
@@ -11,12 +12,14 @@ const Poll = () => {
   const [pollInfo, setPollInfo] = useState({})
   const [pollFound, setPollFound] = useState(false)
   const [pollCreator, setPollCreator] = useState(null)
+  const [options, setOptions] = useState(null)
+  // const [isAddingOption, setIsAddingOption] = useState(false)
 
   let localUserId = localStorage.getItem("userId")
 
   useEffect(() => {
     setPollFound(false)
-    const request = {
+    let request = {
       query: `
         query {
           findPollById(id: "${pollId}") {
@@ -60,6 +63,43 @@ const Poll = () => {
       })
   }, [pollId, localUserId])
 
+  useEffect(() => {
+    const request = {
+      query: `
+        query {
+          findOptionsForPoll(pollId:"${pollId}") {
+            _id
+            content
+          }
+        }
+      `,
+    }
+    fetch("http://localhost:5000/graphql", {
+      method: "POST",
+      body: JSON.stringify(request),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.status !== 200 && res.status !== 201 && res !== null) {
+          throw new Error("Failed")
+        }
+        return res.json()
+      })
+      .then((resData) => {
+        setOptions(resData.data.findOptionsForPoll)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [pollFound, pollId])
+
+  // const handleAddOption = (e) => {
+  //   e.preventDefault()
+  //   setIsAddingOption(true)
+  // }
+
   if (pollFound) {
     return (
       <div className="flex flex-col items-center">
@@ -75,7 +115,14 @@ const Poll = () => {
           <p className="text-gray-500">{pollInfo.description}</p>
         )}
         {isOwner && <h2>Yo</h2>}
-        <div></div>
+        <div className="border">
+          Options:
+          {options &&
+            options.map((option, key) => {
+              return <Option key={key} info={option} />
+            })}
+        </div>
+        {/* <button onClick={handleAddOption}>Add option</button> */}
       </div>
     )
   }
