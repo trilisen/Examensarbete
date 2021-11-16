@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken"
+import dotenv from "dotenv"
+dotenv.config()
 
 export default (req, res, next) => {
   const authHeader = req.get("Authorization")
@@ -13,7 +15,7 @@ export default (req, res, next) => {
   }
   let decodedToken
   try {
-    decodedToken = jwt.verify(token, "fixThisKeyWhenDoingHosting")
+    decodedToken = jwt.verify(token, process.env.JWT_PHRASE)
   } catch (err) {
     req.isAuth = false
     return next()

@@ -1,6 +1,8 @@
 import bcrypt from "bcryptjs"
 import User from "../../models/user.js"
 import jwt from "jsonwebtoken"
+import dotenv from "dotenv"
+dotenv.config()
 
 export default {
   users: async () => {
@@ -46,7 +48,7 @@ export default {
         email: user.email,
         username: user.username,
       },
-      "fixThisKeyWhenDoingHosting",
+      process.env.JWT_PHRASE,
       {
         expiresIn: "1h",
       }

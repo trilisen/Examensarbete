@@ -10,10 +10,12 @@ const Poll = () => {
 
   const [pollInfo, setPollInfo] = useState({})
   const [pollFound, setPollFound] = useState(false)
+  const [pollCreator, setPollCreator] = useState(null)
 
   let localUserId = localStorage.getItem("userId")
 
   useEffect(() => {
+    setPollFound(false)
     const request = {
       query: `
         query {
@@ -46,6 +48,7 @@ const Poll = () => {
         let info = resData.data.findPollById
         setPollFound(true)
         setPollInfo(info)
+        setPollCreator(info.creator.username)
         if (info.creator._id === localUserId) {
           setIsOwner(true)
         } else {
@@ -61,6 +64,7 @@ const Poll = () => {
     return (
       <div className="flex flex-col items-center">
         <h2 className="font-bold text-2xl">{pollInfo.title}</h2>
+        <div>Started by {pollCreator}</div>
         {isOwner ? (
           <input
             type="text"
@@ -76,8 +80,10 @@ const Poll = () => {
     )
   }
   return (
-    <div>
-      <h2>Poll not found</h2>
+    <div className="flex items-center justify-center space-x-2 animate-pulse mt-20">
+      <div className="w-8 h-8 bg-blue-400 rounded-full"></div>
+      <div className="w-8 h-8 bg-blue-400 rounded-full"></div>
+      <div className="w-8 h-8 bg-blue-400 rounded-full"></div>
     </div>
   )
 }

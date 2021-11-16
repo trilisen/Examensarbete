@@ -6,7 +6,7 @@ const RequireAuth = ({ children }) => {
   const { state } = useContext(AuthContext)
   let location = useLocation()
 
-  if (!state.isAuthenticated || !localStorage.getItem("userId")) {
+  if (!state.isAuthenticated && !localStorage.getItem("userId")) {
     // Redirect them to the /auth page, but save the current location they were
     // trying to go to when they were redirected. This allows us to send them
     // along to that page after they login, which is a nicer user experience

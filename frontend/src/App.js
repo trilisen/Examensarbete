@@ -55,8 +55,8 @@ function App() {
         }}
       >
         <div className="min-h-full">
-          <main className="flex flex-col">
-            <div className=" ">
+          <div className="flex flex-col">
+            <header className=" ">
               <a href="/" className="text-center text-5xl py-5 h-1/6">
                 POLL.EM
               </a>
@@ -65,7 +65,7 @@ function App() {
               ) : (
                 <a href="/auth">LOGIN</a>
               )}
-            </div>
+            </header>
             <Routes>
               <Route path="auth" element={<Auth />} />
               <Route
@@ -78,7 +78,7 @@ function App() {
               />
               <Route path="poll/:pollId" element={<Poll />} />
             </Routes>
-          </main>
+          </div>
         </div>
       </AuthProvider>
     </Router>
