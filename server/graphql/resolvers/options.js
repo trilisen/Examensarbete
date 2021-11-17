@@ -30,4 +30,12 @@ export default {
       throw err
     }
   },
+  deleteOption: async (args) => {
+    try {
+      const option = await Option.findByIdAndDelete(args.id)
+      return option
+    } catch (err) {
+      throw err
+    }
+  },
 }

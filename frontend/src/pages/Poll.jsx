@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router"
 import Option from "../components/Option"
+import createOption from "../functions/createOption"
 
 const Poll = () => {
   const params = useParams()
@@ -13,7 +14,7 @@ const Poll = () => {
   const [pollFound, setPollFound] = useState(false)
   const [pollCreator, setPollCreator] = useState(null)
   const [options, setOptions] = useState(null)
-  // const [isAddingOption, setIsAddingOption] = useState(false)
+  const [newOption, setNewOption] = useState("")
 
   let localUserId = localStorage.getItem("userId")
 
@@ -95,10 +96,17 @@ const Poll = () => {
       })
   }, [pollFound, pollId])
 
-  // const handleAddOption = (e) => {
-  //   e.preventDefault()
-  //   setIsAddingOption(true)
-  // }
+  const handleOptionInputChange = (e) => {
+    setNewOption(e.target.value)
+  }
+
+  const handleAddOption = (e) => {
+    if (newOption === "") {
+      e.preventDefault()
+      return
+    }
+    createOption(pollId, newOption)
+  }
 
   if (pollFound) {
     return (
@@ -119,10 +127,19 @@ const Poll = () => {
           Options:
           {options &&
             options.map((option, key) => {
-              return <Option key={key} info={option} />
+              return <Option key={key} info={option} isOwner={isOwner} />
             })}
         </div>
-        {/* <button onClick={handleAddOption}>Add option</button> */}
+        {isOwner && (
+          <form>
+            <input
+              type="text"
+              onChange={handleOptionInputChange}
+              className="border"
+            />
+            <button onClick={handleAddOption}>Add option</button>
+          </form>
+        )}
       </div>
     )
   }
