@@ -11,6 +11,12 @@ const optionSchema = new Schema({
     type: String,
     trim: true,
   },
+  votes: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Vote",
+    },
+  ],
 })
 
 export default mongoose.model("Option", optionSchema)

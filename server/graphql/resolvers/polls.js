@@ -1,5 +1,5 @@
 import Poll from "../../models/poll.js"
-import { getUser, getPollsByUserId } from "./findData.js"
+import { getUser, getPollsByUserId, getPoll } from "./findData.js"
 
 export default {
   polls: async () => {
@@ -16,11 +16,13 @@ export default {
     }
   },
   createPoll: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!")
+    }
     const poll = new Poll({
       title: args.pollInput.title,
       description: args.pollInput.description,
-      image: args.pollInput.image,
-      creator: req.isAuth ? req.userId : null,
+      creator: req.userId,
     })
     try {
       const result = await poll.save()
@@ -42,5 +44,8 @@ export default {
     } catch (err) {
       throw err
     }
+  },
+  findPollById: async (args) => {
+    return getPoll(args.id)
   },
 }

@@ -5,11 +5,13 @@ import User from "../../models/user.js"
 const getPoll = async (pollId) => {
   try {
     const poll = await Poll.findById(pollId)
-    console.log(poll._doc)
-    return {
-      ...poll._doc,
-      creator: getUser.bind(this, poll.creator),
+    if (poll.creator !== null) {
+      return {
+        ...poll._doc,
+        creator: getUser.bind(this, poll.creator),
+      }
     }
+    return poll._doc
   } catch (err) {
     throw err
   }
