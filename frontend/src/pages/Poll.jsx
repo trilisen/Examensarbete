@@ -71,6 +71,9 @@ const Poll = () => {
           findOptionsForPoll(pollId:"${pollId}") {
             _id
             content
+            votes {
+              _id
+            }
           }
         }
       `,
@@ -101,10 +104,11 @@ const Poll = () => {
   }
 
   const handleAddOption = (e) => {
+    e.preventDefault()
     if (newOption === "") {
-      e.preventDefault()
       return
     }
+    setOptions([...options, { _id: pollId, content: newOption }])
     createOption(pollId, newOption)
   }
 
@@ -123,11 +127,24 @@ const Poll = () => {
           <p className="text-gray-500">{pollInfo.description}</p>
         )}
         {isOwner && <h2>Yo</h2>}
+        {!localStorage.getItem("userId") && <h3>Please login to vote</h3>}
         <div className="border">
           Options:
           {options &&
             options.map((option, key) => {
-              return <Option key={key} info={option} isOwner={isOwner} />
+              return (
+                <Option
+                  key={key}
+                  info={option}
+                  isOwner={isOwner}
+                  handleDelete={() => {
+                    const newOptions = options.filter(
+                      (item) => item._id !== option._id
+                    )
+                    setOptions(newOptions)
+                  }}
+                />
+              )
             })}
         </div>
         {isOwner && (

@@ -1,4 +1,5 @@
 import Vote from "../../models/vote.js"
+import Option from "../../models/option.js"
 
 export default {
   createVote: async (args, req) => {
@@ -10,11 +11,14 @@ export default {
       user: req.userId,
     })
     try {
-      const result = await option.save()
-      return {
-        ...result._doc,
-        poll: getPoll.bind(this, result._doc.poll),
+      const result = await vote.save()
+      const option = await Option.findById(args.optionId)
+      if (!option) {
+        throw new Error("Option not found")
       }
+      option.votes.push(vote)
+      await option.save()
+      return result
     } catch (err) {
       throw err
     }

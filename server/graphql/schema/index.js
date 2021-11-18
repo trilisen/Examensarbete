@@ -14,6 +14,7 @@ type Option {
   _id: ID!
   poll: Poll!
   content: String!
+  votes: [Vote!]
 }
 
 type Vote {

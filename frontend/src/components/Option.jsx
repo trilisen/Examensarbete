@@ -1,19 +1,38 @@
-import deleteOption from "../functions/deleteOption"
+import { useEffect, useState } from "react"
 
-const Option = ({ info, isOwner }) => {
-  const handleClick = (type) => {
-    if (type === "vote") {
-      voteOnOption(info._id)
-    } else {
-      deleteOption(info._id)
-    }
+import deleteOption from "../functions/deleteOption"
+import voteOnOption from "../functions/voteOnOption"
+
+const Option = ({ info, isOwner, handleDelete }) => {
+  const [votes, setVotes] = useState(0)
+
+  useEffect(() => {
+    setVotes(info.votes.length)
+  }, [info])
+
+  const handleClick = (e) => {
+    e.preventDefault()
+    deleteOption(info._id)
+    handleDelete()
   }
+
+  const vote = (e) => {
+    e.preventDefault()
+    setVotes(votes + 1)
+    voteOnOption(info._id)
+  }
+
   return (
     <form className="flex">
-      {!isOwner && <button onClick={handleClick("vote")}>V</button>}
+      <h2>{votes}</h2>
+      {!isOwner && localStorage.getItem("userId") && (
+        <button onClick={vote} className="text-green-400">
+          V
+        </button>
+      )}
       <div>{info.content}</div>
       {isOwner && (
-        <button onClick={handleClick("delete")} className="text-red-400 ml-5">
+        <button className="text-red-400 ml-5" onClick={handleClick}>
           X {/* Change to thrashcan or something*/}
         </button>
       )}

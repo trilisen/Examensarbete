@@ -1,10 +1,12 @@
-const voteOnOption = () => {
+const voteOnOption = (optionId) => {
   const request = {
     query: `
       mutation {
-        deleteOption(id:"${optionId}"){
+        createVote(optionId:"${optionId}"){
           _id
-          content
+          user {
+            _id
+          }
         }
       }
     `,
@@ -22,6 +24,9 @@ const voteOnOption = () => {
         throw new Error("Failed")
       }
       return res.json()
+    })
+    .then(() => {
+      console.log("hej")
     })
     .catch((err) => {
       console.log(err)
