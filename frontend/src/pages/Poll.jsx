@@ -92,12 +92,15 @@ const Poll = () => {
         return res.json()
       })
       .then((resData) => {
-        setOptions(resData.data.findOptionsForPoll)
+        const sortedOptions = resData.data.findOptionsForPoll.sort((a, b) =>
+          a.votes.length < b.votes.length ? 1 : -1
+        )
+        setOptions(sortedOptions)
       })
       .catch((err) => {
         console.log(err)
       })
-  }, [pollFound, pollId])
+  }, [pollId])
 
   const handleOptionInputChange = (e) => {
     setNewOption(e.target.value)
@@ -108,7 +111,7 @@ const Poll = () => {
     if (newOption === "") {
       return
     }
-    setOptions([...options, { _id: pollId, content: newOption }])
+    setOptions([...options, { _id: pollId, content: newOption, votes: [] }])
     createOption(pollId, newOption)
   }
 
@@ -131,10 +134,11 @@ const Poll = () => {
         <div className="border">
           Options:
           {options &&
-            options.map((option, key) => {
+            options.map((option) => {
+              console.log("Hi fix rerendering please!")
               return (
                 <Option
-                  key={key}
+                  key={option._id}
                   info={option}
                   isOwner={isOwner}
                   handleDelete={() => {

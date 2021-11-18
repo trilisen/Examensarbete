@@ -8,6 +8,7 @@ const Option = ({ info, isOwner, handleDelete }) => {
 
   useEffect(() => {
     setVotes(info.votes.length)
+    console.log("yo")
   }, [info])
 
   const handleClick = (e) => {
