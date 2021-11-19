@@ -117,50 +117,57 @@ const Poll = () => {
 
   if (pollFound) {
     return (
-      <div className="flex flex-col items-center">
-        <h2 className="font-bold text-2xl">{pollInfo.title}</h2>
-        <div>Started by {pollCreator}</div>
-        {isOwner ? (
-          <input
-            type="text"
-            className="text-gray-500 border"
-            placeholder={pollInfo.description}
-          />
-        ) : (
-          <p className="text-gray-500">{pollInfo.description}</p>
-        )}
-        {isOwner && <h2>Yo</h2>}
-        {!localStorage.getItem("userId") && <h3>Please login to vote</h3>}
-        <div className="border">
-          Options:
-          {options &&
-            options.map((option) => {
-              console.log("Hi fix rerendering please!")
-              return (
-                <Option
-                  key={option._id}
-                  info={option}
-                  isOwner={isOwner}
-                  handleDelete={() => {
-                    const newOptions = options.filter(
-                      (item) => item._id !== option._id
-                    )
-                    setOptions(newOptions)
-                  }}
-                />
-              )
-            })}
+      <div className="flex flex-col items-center justify-center h-5/6 pb-10">
+        <div className="flex flex-col items-center bg-white rounded box-border sm:w-1/2 p-5">
+          <h2 className="font-bold text-2xl mb-4">{pollInfo.title}</h2>
+          <div className="mb-4">Started by {pollCreator}</div>
+          {isOwner ? (
+            <div className="flex flex-col w-full text-center">
+              <label htmlFor="description">Edit your description</label>
+              <textarea
+                type="text"
+                className="border-b text-gray-500 mb-4"
+                placeholder={pollInfo.description}
+                name="description"
+              />
+            </div>
+          ) : (
+            <p className="text-gray-500 mb-2 w-full">{pollInfo.description}</p>
+          )}
+          {!localStorage.getItem("userId") && (
+            <h3 className="mb-2">Please login to vote</h3>
+          )}
+          <div className="w-full text-center mb-2">
+            Options:
+            {options &&
+              options.map((option) => {
+                console.log("Hi fix rerendering please!")
+                return (
+                  <Option
+                    key={option._id}
+                    info={option}
+                    isOwner={isOwner}
+                    handleDelete={() => {
+                      const newOptions = options.filter(
+                        (item) => item._id !== option._id
+                      )
+                      setOptions(newOptions)
+                    }}
+                  />
+                )
+              })}
+          </div>
+          {isOwner && (
+            <form className="mb-2">
+              <input
+                type="text"
+                onChange={handleOptionInputChange}
+                className="border"
+              />
+              <button onClick={handleAddOption}>Add option</button>
+            </form>
+          )}
         </div>
-        {isOwner && (
-          <form>
-            <input
-              type="text"
-              onChange={handleOptionInputChange}
-              className="border"
-            />
-            <button onClick={handleAddOption}>Add option</button>
-          </form>
-        )}
       </div>
     )
   }

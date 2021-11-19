@@ -8,7 +8,6 @@ const Option = ({ info, isOwner, handleDelete }) => {
 
   useEffect(() => {
     setVotes(info.votes.length)
-    console.log("yo")
   }, [info])
 
   const handleClick = (e) => {
@@ -24,7 +23,7 @@ const Option = ({ info, isOwner, handleDelete }) => {
   }
 
   return (
-    <form className="flex">
+    <form className="flex justify-between m-2">
       <h2>{votes}</h2>
       {!isOwner && localStorage.getItem("userId") && (
         <button onClick={vote} className="text-green-400">
@@ -33,7 +32,7 @@ const Option = ({ info, isOwner, handleDelete }) => {
       )}
       <div>{info.content}</div>
       {isOwner && (
-        <button className="text-red-400 ml-5" onClick={handleClick}>
+        <button className="text-red-400" onClick={handleClick}>
           X {/* Change to thrashcan or something*/}
         </button>
       )}
