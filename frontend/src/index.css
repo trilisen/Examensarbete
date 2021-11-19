@@ -6,6 +6,36 @@
   .square {
     aspect-ratio: 1 / 1;
   }
+  .background-gradient {
+    background: rgb(58, 159, 180);
+    background: linear-gradient(
+      141deg,
+      rgba(58, 159, 180, 1) 0%,
+      rgba(255, 255, 255, 1) 52%,
+      rgba(253, 29, 29, 1) 100%
+    );
+  }
+  .button-gradient {
+    background: rgb(110, 197, 215);
+    background: linear-gradient(
+      90deg,
+      rgba(253, 29, 29, 0.7) 0%,
+      rgba(255, 255, 255, 0.7) 50%,
+      rgba(110, 197, 215, 0.7) 100%
+    );
+  }
+}
+
+@layer components {
+  .input-container {
+    @apply flex flex-col;
+  }
+  .input {
+    @apply mb-2 border-b;
+  }
+  .button {
+    @apply border rounded w-full p-2 mt-2;
+  }
 }
 
 html,

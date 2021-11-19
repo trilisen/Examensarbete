@@ -6,6 +6,10 @@ module.exports = {
       padding: {
         "1/3": "33.333333%",
       },
+      colors: {
+        mainBlue: "#6ec5d7",
+        mainRed: "#ff6262",
+      },
     },
   },
   variants: {

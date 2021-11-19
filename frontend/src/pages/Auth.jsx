@@ -129,66 +129,75 @@ const Auth = () => {
     setIsLogin(!isLogin)
   }
 
-  const inputStyles = "border"
-
   return (
-    <div className="flex flex-col">
-      {data.errorMessage && (
-        <div className="text-red-600">{data.errorMessage}</div>
-      )}
-      {data.statusMessage && (
-        <div className="text-green-400">{data.statusMessage}</div>
-      )}
-      <form className="flex flex-col">
-        {!isLogin && (
-          <label htmlFor="username">
-            Username
+    <div className="flex flex-col items-center justify-center h-5/6 pb-10">
+      <div className="flex flex-col justify-center items-center bg-white p-5 rounded box-border sm:w-1/2">
+        {data.errorMessage && (
+          <div className="text-red-600">{data.errorMessage}</div>
+        )}
+        {data.statusMessage && (
+          <div className="text-green-400">{data.statusMessage}</div>
+        )}
+        <form className="flex flex-col justify-center sm:w-2/3">
+          <h2 className="text-2xl font-bold text-center mb-5">
+            {isLogin ? "Log in" : "Register"}
+          </h2>
+          {!isLogin && (
+            <div className="input-container">
+              <label htmlFor="username">Username</label>
+              <input
+                type="text"
+                name="username"
+                className="input"
+                onChange={handleInputChange}
+              />
+            </div>
+          )}
+          <div className="input-container">
+            <label htmlFor="email">Email</label>
             <input
-              type="text"
-              name="username"
-              className={inputStyles}
+              type="email"
+              name="email"
+              className="input"
               onChange={handleInputChange}
             />
-          </label>
-        )}
-        <label htmlFor="email">
-          Email
-          <input
-            type="email"
-            name="email"
-            className={inputStyles}
-            onChange={handleInputChange}
-          />
-        </label>
+          </div>
 
-        <label htmlFor="password">
-          Password
-          <input
-            type="password"
-            name="password"
-            className={inputStyles}
-            onChange={handleInputChange}
-          />
-        </label>
-
-        {!isLogin && (
-          <label htmlFor="passwordConfirm">
-            Confirm password
+          <div className="input-container">
+            <label htmlFor="password">Password</label>
             <input
               type="password"
-              name="passwordConfirm"
-              className={inputStyles}
+              name="password"
+              className="input"
               onChange={handleInputChange}
             />
-          </label>
-        )}
-        <button type="submit" onClick={handleFormSubmit}>
-          Submit
+          </div>
+
+          {!isLogin && (
+            <div className="input-container">
+              <label htmlFor="passwordConfirm">Confirm password</label>
+              <input
+                type="password"
+                name="passwordConfirm"
+                className="input"
+                onChange={handleInputChange}
+              />
+            </div>
+          )}
+          <div className="flex justify-center">
+            <button
+              type="submit"
+              onClick={handleFormSubmit}
+              className="button button-gradient"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+        <button onClick={handleIsLoginChange} className="m-2 mt-4">
+          Change to {isLogin ? "Register" : "Login"}
         </button>
-      </form>
-      <button onClick={handleIsLoginChange}>
-        Change to {isLogin ? "Register" : "Login"}
-      </button>
+      </div>
     </div>
   )
 }

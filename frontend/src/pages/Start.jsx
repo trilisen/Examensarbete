@@ -24,7 +24,7 @@ const Start = () => {
 
   return (
     <div className="container mx-auto flex flex-col items-center justify-center h-full">
-      <div className="flex flex-col items-center w-4/6">
+      <div className="flex flex-col items-center w-4/6 pb-10">
         {!debouncedtitleInput && (
           <h2 className="text-xl">To start a poll, enter a title</h2>
         )}
@@ -39,14 +39,6 @@ const Start = () => {
             <h2 className="mt-2">Choose your way to poll</h2>
             <div className="grid gap-5 sm:gap-10 md:gap-15 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 mt-2">
               <PollOption pollType="Simple" onPress={handleInitialPollSubmit} />
-              <PollOption
-                pollType="Multiple Choice"
-                onPress={handleInitialPollSubmit}
-              />
-              <PollOption
-                pollType="Tournament"
-                onPress={handleInitialPollSubmit}
-              />
             </div>
           </div>
         )}

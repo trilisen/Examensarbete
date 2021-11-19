@@ -2,10 +2,10 @@ const PollOption = ({ pollType, onPress }) => {
   return (
     <button
       value={pollType}
-      className="bg-gray-200 square rounded-md"
+      className="bg-white square rounded-md"
       onClick={onPress}
     >
-      Test
+      Basic (only one that exists for now)
     </button>
   )
 }

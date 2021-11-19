@@ -54,16 +54,23 @@ function App() {
           dispatch,
         }}
       >
-        <div className="min-h-full">
-          <div className="flex flex-col">
-            <header className=" ">
-              <a href="/" className="text-center text-5xl py-5 h-1/6">
+        <div className="h-full background-gradient">
+          <div className="flex flex-col h-full">
+            <header className="flex flex-col md:flex-row justify-center items-center h-1/6">
+              <a href="/" className="text-center text-5xl py-5">
                 POLL.EM
               </a>
               {localStorage.getItem("userId") ? (
-                <button onClick={handleLogout}>LOGOUT</button>
+                <button
+                  onClick={handleLogout}
+                  className="static sm:absolute sm:right-10"
+                >
+                  LOGOUT
+                </button>
               ) : (
-                <a href="/auth">LOGIN</a>
+                <a href="/auth" className="static sm:absolute sm:right-10">
+                  LOGIN
+                </a>
               )}
             </header>
             <Routes>
