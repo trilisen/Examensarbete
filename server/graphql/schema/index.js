@@ -67,7 +67,7 @@ type RootMutation {
   createPoll(pollInput: PollInput): Poll
   createUser(userInput: UserInput): User
   createOption(optionInput: OptionInput): Option
-  deleteOption(id: ID!): Option
+  deleteOption(id: ID!): Option!
   createVote(optionId: ID!): Vote
 }
 

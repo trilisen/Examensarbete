@@ -1,4 +1,5 @@
 const deleteOption = (optionId) => {
+  console.log(optionId)
   const request = {
     query: `
       mutation {

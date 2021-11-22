@@ -1,4 +1,4 @@
-const createOption = (pollId, newOption) => {
+const createOption = async (pollId, newOption, callback) => {
   const request = {
     query: `
       mutation {
@@ -9,7 +9,7 @@ const createOption = (pollId, newOption) => {
       }
     `,
   }
-  fetch("http://localhost:5000/graphql", {
+  let response = await fetch("http://localhost:5000/graphql", {
     method: "POST",
     body: JSON.stringify(request),
     headers: {
@@ -25,6 +25,8 @@ const createOption = (pollId, newOption) => {
     .catch((err) => {
       console.log(err)
     })
+  let resData = await response
+  return resData
 }
 
 export default createOption

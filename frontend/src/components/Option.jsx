@@ -7,6 +7,9 @@ const Option = ({ info, isOwner, handleDelete }) => {
   const [votes, setVotes] = useState(0)
 
   useEffect(() => {
+    if (!info.votes) {
+      info.votes = []
+    }
     setVotes(info.votes.length)
   }, [info])
 

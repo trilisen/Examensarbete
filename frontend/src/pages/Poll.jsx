@@ -106,13 +106,14 @@ const Poll = () => {
     setNewOption(e.target.value)
   }
 
-  const handleAddOption = (e) => {
+  const handleAddOption = async (e) => {
     e.preventDefault()
     if (newOption === "") {
       return
     }
-    setOptions([...options, { _id: pollId, content: newOption, votes: [] }])
-    createOption(pollId, newOption)
+    let optionData = await createOption(pollId, newOption)
+    console.log(optionData)
+    setOptions([...options, optionData.data.createOption])
   }
 
   if (pollFound) {
@@ -140,18 +141,20 @@ const Poll = () => {
           <div className="w-full text-center mb-2">
             Options:
             {options &&
-              options.map((option) => {
+              options.map((option, key) => {
                 console.log("Hi fix rerendering please!")
                 return (
                   <Option
-                    key={option._id}
+                    key={key}
                     info={option}
                     isOwner={isOwner}
                     handleDelete={() => {
                       const newOptions = options.filter(
                         (item) => item._id !== option._id
                       )
+                      console.log(options)
                       setOptions(newOptions)
+                      console.log(newOptions)
                     }}
                   />
                 )
