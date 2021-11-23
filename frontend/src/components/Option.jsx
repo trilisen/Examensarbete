@@ -26,20 +26,22 @@ const Option = ({ info, isOwner, handleDelete }) => {
   }
 
   return (
-    <form className="flex justify-between m-2">
-      <h2>{votes}</h2>
+    <div className="flex justify-between m-2">
+      {isOwner && <h2>{votes}</h2>}
       {!isOwner && localStorage.getItem("userId") && (
         <button onClick={vote} className="text-green-400">
-          V
+          []
         </button>
       )}
-      <div>{info.content}</div>
-      {isOwner && (
+      <div className="mx-5">{info.content}</div>
+      {isOwner ? (
         <button className="text-red-400" onClick={handleClick}>
           X {/* Change to thrashcan or something*/}
         </button>
+      ) : (
+        <div></div>
       )}
-    </form>
+    </div>
   )
 }
 

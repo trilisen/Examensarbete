@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router"
 import Option from "../components/Option"
+import createOption from "../functions/createOption"
 
-const Poll = () => {
+const EditPoll = () => {
   const params = useParams()
 
   const { pollId } = params
+
+  const [isOwner, setIsOwner] = useState(false)
 
   const [pollInfo, setPollInfo] = useState({})
   const [pollFound, setPollFound] = useState(false)
   const [pollCreator, setPollCreator] = useState(null)
   const [options, setOptions] = useState(null)
+  const [newOption, setNewOption] = useState("")
 
   let localUserId = localStorage.getItem("userId")
 
@@ -49,6 +53,11 @@ const Poll = () => {
         setPollFound(true)
         setPollInfo(info)
         setPollCreator(info.creator.username)
+        if (info.creator._id === localUserId) {
+          setIsOwner(true)
+        } else {
+          setIsOwner(false)
+        }
       })
       .catch((err) => {
         console.log(err)
@@ -93,18 +102,34 @@ const Poll = () => {
       })
   }, [pollId])
 
-  if (pollFound) {
+  const handleOptionInputChange = (e) => {
+    setNewOption(e.target.value)
+  }
+
+  const handleAddOption = async (e) => {
+    e.preventDefault()
+    if (newOption === "") {
+      return
+    }
+    let optionData = await createOption(pollId, newOption)
+    setOptions([...options, optionData.data.createOption])
+  }
+
+  if (isOwner && pollFound) {
     return (
       <div className="flex flex-col items-center justify-center h-5/6 pb-10">
         <div className="flex flex-col items-center bg-white rounded box-border sm:w-1/2 p-5">
           <h2 className="font-bold text-2xl mb-4">{pollInfo.title}</h2>
           <div className="mb-4">Started by {pollCreator}</div>
-          <p className="text-gray-500 mb-2 w-full text-center">
-            {pollInfo.description}
-          </p>
-          {!localStorage.getItem("userId") && (
-            <h3 className="mb-2">Please login to vote</h3>
-          )}
+          <div className="flex flex-col w-full text-center">
+            <label htmlFor="description">Edit your description</label>
+            <textarea
+              type="text"
+              className="border-b text-gray-500 mb-4"
+              placeholder={pollInfo.description}
+              name="description"
+            />
+          </div>
           <div className="w-full text-center mb-2 divide-y">
             Options:
             {options &&
@@ -113,6 +138,7 @@ const Poll = () => {
                   <Option
                     key={key}
                     info={option}
+                    isOwner={isOwner}
                     handleDelete={() => {
                       const newOptions = options.filter(
                         (item) => item._id !== option._id
@@ -123,6 +149,16 @@ const Poll = () => {
                 )
               })}
           </div>
+          {isOwner && (
+            <form className="mb-2">
+              <input
+                type="text"
+                onChange={handleOptionInputChange}
+                className="border"
+              />
+              <button onClick={handleAddOption}>Add option</button>
+            </form>
+          )}
         </div>
       </div>
     )
@@ -136,4 +172,4 @@ const Poll = () => {
   )
 }
 
-export default Poll
+export default EditPoll

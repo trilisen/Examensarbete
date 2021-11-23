@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 
 import Start from "./pages/Start.jsx"
 import Poll from "./pages/Poll.jsx"
+import EditPoll from "./pages/EditPoll.jsx"
 import Auth from "./pages/Auth.jsx"
 import RequireAuth from "./components/RequireAuth"
 
@@ -84,6 +85,7 @@ function App() {
                 }
               />
               <Route path="poll/:pollId" element={<Poll />} />
+              <Route path="poll/:pollId/edit" element={<EditPoll />} />
             </Routes>
           </div>
         </div>
