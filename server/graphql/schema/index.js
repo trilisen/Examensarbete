@@ -19,8 +19,8 @@ type Option {
 
 type Vote {
   _id: ID!
-  option: Option!
-  user: User!
+  option: ID!
+  user: ID!
   createdAt: String!
   updatedAt: String!
 }

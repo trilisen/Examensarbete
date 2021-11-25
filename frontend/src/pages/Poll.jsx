@@ -10,7 +10,11 @@ const Poll = () => {
   const [pollInfo, setPollInfo] = useState({})
   const [pollFound, setPollFound] = useState(false)
   const [pollCreator, setPollCreator] = useState(null)
-  const [options, setOptions] = useState(null)
+  const [options, setOptions] = useState([])
+  const [hasVoted, setHasVoted] = useState({
+    general: false,
+    which: "",
+  })
 
   let localUserId = localStorage.getItem("userId")
 
@@ -64,6 +68,8 @@ const Poll = () => {
             content
             votes {
               _id
+              user
+              option
             }
           }
         }
@@ -86,12 +92,29 @@ const Poll = () => {
         const sortedOptions = resData.data.findOptionsForPoll.sort((a, b) =>
           a.votes.length < b.votes.length ? 1 : -1
         )
+        sortedOptions.forEach((option) => {
+          option.votes.forEach((vote) => {
+            if (vote.user === localUserId) {
+              setHasVoted({
+                general: true,
+                which: vote.option,
+              })
+            }
+          })
+        })
         setOptions(sortedOptions)
       })
       .catch((err) => {
         console.log(err)
       })
-  }, [pollId])
+  }, [pollId, localUserId])
+
+  const voteUpdate = (option) => {
+    setHasVoted({
+      general: true,
+      which: option._id,
+    })
+  }
 
   if (pollFound) {
     return (
@@ -113,12 +136,8 @@ const Poll = () => {
                   <Option
                     key={key}
                     info={option}
-                    handleDelete={() => {
-                      const newOptions = options.filter(
-                        (item) => item._id !== option._id
-                      )
-                      setOptions(newOptions)
-                    }}
+                    hasVoted={hasVoted}
+                    voteUpdate={voteUpdate}
                   />
                 )
               })}

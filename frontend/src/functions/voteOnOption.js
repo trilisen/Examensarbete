@@ -4,9 +4,7 @@ const voteOnOption = (optionId) => {
       mutation {
         createVote(optionId:"${optionId}"){
           _id
-          user {
-            _id
-          }
+          user
         }
       }
     `,
@@ -24,9 +22,6 @@ const voteOnOption = (optionId) => {
         throw new Error("Failed")
       }
       return res.json()
-    })
-    .then(() => {
-      console.log("hej")
     })
     .catch((err) => {
       console.log(err)

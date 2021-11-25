@@ -115,6 +115,11 @@ const EditPoll = () => {
     setOptions([...options, optionData.data.createOption])
   }
 
+  const deleteOption = (option) => {
+    const newOptions = options.filter((item) => item._id !== option._id)
+    setOptions(newOptions)
+  }
+
   if (isOwner && pollFound) {
     return (
       <div className="flex flex-col items-center justify-center h-5/6 pb-10">
@@ -139,12 +144,7 @@ const EditPoll = () => {
                     key={key}
                     info={option}
                     isOwner={isOwner}
-                    handleDelete={() => {
-                      const newOptions = options.filter(
-                        (item) => item._id !== option._id
-                      )
-                      setOptions(newOptions)
-                    }}
+                    handleDelete={deleteOption}
                   />
                 )
               })}

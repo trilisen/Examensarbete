@@ -1,5 +1,5 @@
 import Option from "../../models/option.js"
-import { getOptionsForPoll, getPoll } from "./findData.js"
+import { getOptionsForPoll, getPoll, getVotes } from "./findData.js"
 
 export default {
   findOptionsForPoll: async (args) => {
@@ -9,6 +9,7 @@ export default {
         return {
           ...option._doc,
           poll: getPoll.bind(this, option._doc.poll),
+          votes: getVotes.bind(this, option._doc._id),
         }
       })
     } catch (err) {
