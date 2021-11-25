@@ -3,41 +3,57 @@ import { useEffect, useState } from "react"
 import deleteOption from "../functions/deleteOption"
 import voteOnOption from "../functions/voteOnOption"
 
-const Option = ({ info, isOwner, handleDelete }) => {
+const Option = ({
+  info,
+  isOwner,
+  handleDelete = null,
+  hasVoted,
+  voteUpdate = null,
+}) => {
   const [votes, setVotes] = useState(0)
 
   useEffect(() => {
+    if (!info.votes) {
+      info.votes = []
+    }
     setVotes(info.votes.length)
-    console.log("yo")
   }, [info])
 
   const handleClick = (e) => {
     e.preventDefault()
     deleteOption(info._id)
-    handleDelete()
+    handleDelete(info)
   }
 
   const vote = (e) => {
-    e.preventDefault()
-    setVotes(votes + 1)
+    if (hasVoted.general) {
+      e.preventDefault()
+      return
+    }
     voteOnOption(info._id)
+    voteUpdate(info)
   }
 
   return (
-    <form className="flex">
-      <h2>{votes}</h2>
+    <div className="flex justify-between items-center py-2">
+      {isOwner && <h2>{votes}</h2>}
       {!isOwner && localStorage.getItem("userId") && (
-        <button onClick={vote} className="text-green-400">
-          V
-        </button>
+        <input
+          onClick={vote}
+          className="text-green-400"
+          type="checkbox"
+          defaultChecked={hasVoted.which === info._id}
+        />
       )}
-      <div>{info.content}</div>
-      {isOwner && (
-        <button className="text-red-400 ml-5" onClick={handleClick}>
+      <div className="mx-5">{info.content}</div>
+      {isOwner ? (
+        <button className="text-red-400" onClick={handleClick}>
           X {/* Change to thrashcan or something*/}
         </button>
+      ) : (
+        <div></div>
       )}
-    </form>
+    </div>
   )
 }
 

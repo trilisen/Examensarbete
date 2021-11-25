@@ -1,6 +1,7 @@
 import Option from "../../models/option.js"
 import Poll from "../../models/poll.js"
 import User from "../../models/user.js"
+import Vote from "../../models/vote.js"
 
 const getPoll = async (pollId) => {
   try {
@@ -29,6 +30,15 @@ const getUser = async (userId) => {
   }
 }
 
+const getVotes = async (optionId) => {
+  try {
+    const votes = await Vote.find({ option: optionId })
+    return votes
+  } catch (err) {
+    throw err
+  }
+}
+
 const getPollsByUserId = async (userId) => {
   try {
     const polls = await Poll.find({ creator: userId })
@@ -47,4 +57,4 @@ const getOptionsForPoll = async (pollId) => {
   }
 }
 
-export { getPoll, getUser, getPollsByUserId, getOptionsForPoll }
+export { getPoll, getUser, getPollsByUserId, getOptionsForPoll, getVotes }

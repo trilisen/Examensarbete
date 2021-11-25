@@ -30,7 +30,7 @@ const createPoll = (title, pollType, token) => {
     })
     .then((resData) => {
       const pollInfo = resData.data.createPoll
-      window.location.href = `/poll/${pollInfo._id}`
+      window.location.href = `/poll/${pollInfo._id}/edit`
     })
     .catch((err) => {
       console.log(err)
